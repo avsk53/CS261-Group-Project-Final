@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  flask:
+    build: ./flask
+    depends_on:
+      - postgres
+    command: python /src/app.py
+    ports: 
+      - 5555:5555
+    env_file:
+      - ./env.dev
+  
+  postgres:
+    build: ./postgres
+    environment:
+      - POSTGRES_USER=flask
+      - POSTGRES_PASSWORD=flask
+      - POSTGRES_DB=pip
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres/data:/var/lib/postgres/data
