@@ -50,7 +50,7 @@ def evaluation(projectID, evalType):
     
     print()
     testArray = np.array(testMetrics).reshape(1,-1)
-    linearRegression = regr.predict(testArray)
+    linearRegression = regr.predict(testArray)[0]
     print(linearRegression)
 
     evalID = str(uuid.uuid4().fields[-1])[:6]
@@ -66,8 +66,8 @@ def evaluation(projectID, evalType):
 
     #Deleting pre-existing evaluation if present then storing current evaluation
     executeText("delete from metric_assignment where project_id={} and metric_id=11".format(projectID))
-    executeText("insert into metric_assignment values('{}','{}','{}')".format(11,projectID,linearRegression[0]))
-    executeText("insert into project_evaluation values('{}','{}','{}','{}','{}','{}')".format(evalID, projectID, currentTime, evalType, evalLabel, linearRegression[0]))
+    executeText("insert into metric_assignment values('{}','{}','{}')".format(11,projectID,linearRegression))
+    executeText("insert into project_evaluation values('{}','{}','{}','{}','{}','{}')".format(evalID, projectID, currentTime, evalType, evalLabel, linearRegression))
     session.commit()
 
 
@@ -82,17 +82,17 @@ def evaluation(projectID, evalType):
     for x in range(5):
         arr = [random.uniform(prob_range[0],prob_range[1]) for _ in range(12)]
         
-        metric[x][0] = data.TTR0_inverse(arr[0])[0]
-        metric[x][1] = data.CR1_inverse(arr[1])[0]
+        metric[x][0] = data.TTR0_inverse(arr[0])
+        metric[x][1] = data.CR1_inverse(arr[1])
         metric[x][2] = data.TS2_inverse(arr[2])
-        metric[x][3] = data.M3_inverse(arr[3])[0]
-        metric[x][4] = data.SPI4_inverse(arr[4])[0]
-        metric[x][5] = data.CPI5_inverse(arr[5])[0] 
-        metric[x][6] = data.CQ6_inverse(arr[6])[0] 
-        metric[x][7] = data.CRF7_inverse(arr[7])[0] 
-        metric[x][8] = data.DF8_inverse(arr[8])[0]
-        metric[x][9] = data.TSR9_inverse(arr[9])[0] 
-        metric[x][10] = data.CC10_inverse(arr[10])[0]
+        metric[x][3] = data.M3_inverse(arr[3])
+        metric[x][4] = data.SPI4_inverse(arr[4])
+        metric[x][5] = data.CPI5_inverse(arr[5])
+        metric[x][6] = data.CQ6_inverse(arr[6])
+        metric[x][7] = data.CRF7_inverse(arr[7])
+        metric[x][8] = data.DF8_inverse(arr[8])
+        metric[x][9] = data.TSR9_inverse(arr[9])
+        metric[x][10] = data.CC10_inverse(arr[10])
 
         tempReshape = np.array(metric[x][0:11]).reshape(1,-1)
         metric[x][11] = regr.predict(tempReshape)[0]

@@ -187,11 +187,11 @@ export default {
               metric_value: this.morale
             },
             {
-              metric_id: 13,
+              metric_id: 12,
               metric_value: this.budgetSpent
             },
             {
-              metric_id: 14,
+              metric_id: 13,
               metric_value: this.completion
             },
             {

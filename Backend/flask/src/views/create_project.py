@@ -53,12 +53,15 @@ def create_project(auth_user):
       end = datetime.strptime(project_end, '%Y-%m-%d')
 
       # Percentage of the way through the project
-      time_elapsed = min((datetime.now()-start)/(end-start), 1)
+      time_elapsed = min((datetime.now()-start).total_seconds()/(end-start).total_seconds(), 1)
 
+      actual_cost = 0
+      work_completed = 0
+      total_budget = 0
       for m in soft_metrics:
-        if int(m["metric_id"]) == 13:
+        if int(m["metric_id"]) == 12:
           actual_cost = float(m['metric_value'])
-        if int(m["metric_id"]) == 14:
+        if int(m["metric_id"]) == 13:
           work_completed = float(m['metric_value'])/100
         if int(m["metric_id"]) == 15:
           total_budget = float(m['metric_value'])
@@ -117,8 +120,9 @@ def create_project(auth_user):
       # TODO: When GitHub scraping is implemented:
       scrape(project_id)
 
+      evaluation(project_id, 0)  
+
       # Generate initial evaluation
-      evaluation(project_id, 0)
 
       project = session.get(Project_Table, project_id)
       recent = session.scalars(
